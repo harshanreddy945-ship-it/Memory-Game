@@ -45,12 +45,16 @@ def main():
 
     clock = pygame.time.Clock()
     running = True
+    final_time = None
 
     while running:
-        if start_time is None:
-            elapsed = 0.0
+        if logic.is_game_over(state) and final_time is not None:
+            elapsed = final_time
         else:
-            elapsed = time.time() - start_time
+            if start_time is None:
+                elapsed = 0.0
+            else:
+                elapsed = time.time() - start_time
 
         stats = logic.get_stats(state)
         best_time = data_manager.get_best_time(highscores, difficulty)
@@ -63,6 +67,7 @@ def main():
                 game_board, state, start_time, mismatch_timer, score_saved = start_new_game(
                     difficulty
                 )
+                final_time = None
             else:
                 if mismatch_timer is None:
                     tile = ui.get_click_tile_from_event(event)
